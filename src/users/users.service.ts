@@ -48,8 +48,7 @@ export class UsersService {
         return await this.userRepo.save(newUser);
     }
 
-    //TODO
-    async updateUser(id: string, dto: UpdatePasswordDto): Promise<UserToResponse> {
+    async changePassword(id: string, dto: UpdatePasswordDto): Promise<UserToResponse> {
         const user = await this.userRepo.findOne({
             where: {
                 id
@@ -64,7 +63,11 @@ export class UsersService {
             throw new HttpException('Wrong old password', HttpStatus.FORBIDDEN);
         }
 
-        
+        await this.userRepo.update({
+            id
+        }, {
+            password: dto.newPassword
+        })
         return user.toResponse();
     }
 

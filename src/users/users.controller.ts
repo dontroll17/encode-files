@@ -37,13 +37,13 @@ export class UsersController {
     }
 
     @Put(':id')
-    updateUser(
+    changePassword(
         @Param('id', new ParseUUIDPipe({ 
             version: '4'
         })) id: string,
         @Body() dto: UpdatePasswordDto
     ) {
-        return this.service.updateUser(id, dto);
+        return this.service.changePassword(id, dto);
     }
 
     @Delete(':id')

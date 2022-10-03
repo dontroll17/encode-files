@@ -46,7 +46,7 @@ describe('UsersService', () => {
     });
   
     it('should be update method', () => {
-      expect(service.updateUser).toBeDefined();
+      expect(service.changePassword).toBeDefined();
     });
   });
 });

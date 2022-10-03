@@ -45,7 +45,7 @@ describe('UsersController', () => {
     });
   
     it('should be update method', () => {
-      expect(controller.updateUser).toBeDefined();
+      expect(controller.changePassword).toBeDefined();
     });
   });
 });
