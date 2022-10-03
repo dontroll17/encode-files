@@ -36,9 +36,19 @@ export class UsersService {
     }
 
     async createUser(dto: CreateUserDto): Promise<User> {
-        return await this.userRepo.create(dto);
+        const user = await this.userRepo.findOne({
+            where: {
+                email: dto.email
+            }
+        });
+        if(user) {
+            throw new HttpException('Mail already exsist', HttpStatus.CONFLICT);
+        }
+        const newUser = await this.userRepo.create(dto);
+        return await this.userRepo.save(newUser);
     }
 
+    //TODO
     async updateUser(id: string, dto: UpdatePasswordDto): Promise<UserToResponse> {
         const user = await this.userRepo.findOne({
             where: {
@@ -54,9 +64,7 @@ export class UsersService {
             throw new HttpException('Wrong old password', HttpStatus.FORBIDDEN);
         }
 
-        user.version++;
-        user.password = dto.newPassword;
-
+        
         return user.toResponse();
     }
 
