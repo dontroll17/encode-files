@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcryptjs';
 
 type UserToResponse = {
     id: string;
@@ -44,7 +45,8 @@ export class UsersService {
         if(user) {
             throw new HttpException('Mail already exsist', HttpStatus.CONFLICT);
         }
-        const newUser = await this.userRepo.create(dto);
+        const hashPas = await bcrypt.hash(dto.password, 1);
+        const newUser = await this.userRepo.create({...dto, password: hashPas});
         return await this.userRepo.save(newUser);
     }
 
@@ -59,14 +61,17 @@ export class UsersService {
             throw new NotFoundException("User not found");
         }
       
-        if (user.password !== dto.password) {
+        const checkPassword = await bcrypt.compare(dto.password, user.password)
+
+        if (!checkPassword) {
             throw new HttpException('Wrong old password', HttpStatus.FORBIDDEN);
         }
 
+        const hashPas = await bcrypt.hash(dto.newPassword, 1);
         await this.userRepo.update({
             id
         }, {
-            password: dto.newPassword
+            password: hashPas
         })
         return user.toResponse();
     }
@@ -75,7 +80,7 @@ export class UsersService {
         const res = await this.userRepo.delete(id);
 
         if(res.affected === 0) {
-            throw new NotFoundException('USer not found');
+            throw new NotFoundException('User not found');
         }
     }
 }
