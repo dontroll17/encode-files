@@ -1,7 +1,9 @@
+import { File } from 'src/files/entities/file.entity';
 import { 
     Column, 
     CreateDateColumn, 
     Entity, 
+    OneToMany, 
     PrimaryGeneratedColumn, 
     UpdateDateColumn, 
     VersionColumn 
@@ -26,6 +28,9 @@ export class User {
 
     @VersionColumn()
     version: number;
+
+    @OneToMany(() => File, file => file.user)
+    files: File[]
 
     toResponse() {
         const { id, email } = this;
