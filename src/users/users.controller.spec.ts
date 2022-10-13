@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { CustomLoggerService } from '../custom-logger/custom-logger.service';
 import { User } from './entities/user.entity';
 import { mockUserRepository } from './mocks/repository.mock';
 import { UsersController } from './users.controller';
@@ -16,7 +17,8 @@ describe('UsersController', () => {
         {
           provide: getRepositoryToken(User),
           useFactory: mockUserRepository
-        }
+        },
+        CustomLoggerService
       ]
     }).compile();
 

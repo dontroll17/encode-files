@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
+import { CustomLoggerModule } from './custom-logger/custom-logger.module';
 import 'dotenv/config';
 
 @Module({
@@ -18,7 +19,8 @@ import 'dotenv/config';
       synchronize: true
     }),
     UsersModule,
-    FilesModule
+    FilesModule,
+    CustomLoggerModule
   ],
   controllers: [],
   providers: [],

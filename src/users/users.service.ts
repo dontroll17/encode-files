@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
+import { CustomLoggerService } from '../custom-logger/custom-logger.service';
 
 type UserToResponse = {
     id: string;
@@ -14,10 +15,12 @@ type UserToResponse = {
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectRepository(User) private readonly userRepo: Repository<User>
+        @InjectRepository(User) private readonly userRepo: Repository<User>,
+        private logger: CustomLoggerService
     ) {}
 
     async getAll(): Promise<UserToResponse[]> {
+        this.logger.log('log');
         const users = await this.userRepo.find();
         return users.map(user => user.toResponse())
     }

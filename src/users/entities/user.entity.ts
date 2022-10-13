@@ -1,4 +1,4 @@
-import { File } from 'src/files/entities/file.entity';
+import { File } from '../../files/entities/file.entity';
 import { 
     Column, 
     CreateDateColumn, 
@@ -33,10 +33,12 @@ export class User {
     files: File[]
 
     toResponse() {
-        const { id, email } = this;
+        const { id, email, version, files } = this;
         return {
             id,
-            email
+            email,
+            version,
+            files
         }
     }
 }
