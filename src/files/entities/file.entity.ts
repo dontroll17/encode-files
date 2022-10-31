@@ -1,6 +1,7 @@
 import { User } from '../../users/entities/user.entity';
 import {  
     Column,
+    CreateDateColumn,
     Entity, 
     ManyToOne, 
     PrimaryGeneratedColumn, 
@@ -13,6 +14,9 @@ export class File {
 
     @Column()
     files: string;
+
+    @CreateDateColumn()
+    dateCreated: Date;
 
     @ManyToOne(() => User, user => user.files)
     user: User

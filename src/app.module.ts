@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { CustomLoggerModule } from './custom-logger/custom-logger.module';
 import 'dotenv/config';
+import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -24,6 +26,12 @@ import 'dotenv/config';
     CacheModule.register({
       isGlobal: true,
       ttl: 30
+    }),
+    MulterModule.register({
+      dest: './uploads'
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads')
     })
   ],
   controllers: [],
