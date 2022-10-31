@@ -7,7 +7,9 @@ import {
     Put, 
     Delete, 
     ParseUUIDPipe, 
-    HttpCode
+    HttpCode,
+    UseInterceptors,
+    CacheInterceptor
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
@@ -17,6 +19,7 @@ import { UsersService } from './users.service';
 export class UsersController {
     constructor(private readonly service: UsersService) {}
 
+    @UseInterceptors(CacheInterceptor)
     @Get()
     getAll() {
         return this.service.getAll();

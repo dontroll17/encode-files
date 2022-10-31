@@ -22,7 +22,7 @@ export class UsersService {
     async getAll(): Promise<UserToResponse[]> {
         this.logger.log('log');
         const users = await this.userRepo.find();
-        return users.map(user => user.toResponse())
+        return users.map(user => user.toResponse());
     }
 
     async getUserById(id: string): Promise<UserToResponse> {

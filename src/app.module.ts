@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
@@ -20,7 +20,11 @@ import 'dotenv/config';
     }),
     UsersModule,
     FilesModule,
-    CustomLoggerModule
+    CustomLoggerModule,
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 30
+    })
   ],
   controllers: [],
   providers: [],
