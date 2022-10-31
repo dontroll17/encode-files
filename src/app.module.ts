@@ -7,6 +7,7 @@ import { CustomLoggerModule } from './custom-logger/custom-logger.module';
 import 'dotenv/config';
 import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CryptModule } from './crypt/crypt.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads')
-    })
+    }),
+    CryptModule
   ],
   controllers: [],
   providers: [],

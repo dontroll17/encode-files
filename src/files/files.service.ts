@@ -1,37 +1,35 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { createWriteStream, createReadStream } from 'fs';
+import { createWriteStream } from 'fs';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { createHash, randomBytes, createCipheriv } from 'crypto';
-
-
-const algoritm = 'aes-256-ctr';
-const key = createHash('sha256').update('PASS').digest('base64').substring(0,32);
+import { CryptService } from 'src/crypt/crypt.service';
 
 const filePath = join(__dirname, '..', '..', 'uploads');
 
 @Injectable()
 export class FilesService {
+    constructor(private readonly crypt: CryptService) {}
 
-    async uploadedFile(file: Express.Multer.File) {
+    uploadedFile(file: Express.Multer.File) {
         try {
             const fileExtension = file.originalname.split('.').pop();
             const fileName = `${randomUUID()}.${fileExtension}`;
 
-            console.log(file.buffer.toString());
-
-            const iv = randomBytes(16);
-            const cipher = createCipheriv(algoritm, key, iv);
-
-            const encrypt = Buffer.concat([iv, cipher.update(file.buffer), cipher.final()]);
-
+            const data = this.crypt.encrypt(file.buffer);
             const stream = createWriteStream(join(filePath, fileName));
-            stream.write(encrypt);
+            stream.write(data);
             stream.close();
 
         } catch(e) { 
             throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    async getFile(fileName) {
+        const data = await readFile(join(filePath, fileName));
+        let decryptData = this.crypt.decrypt(data.toString());
+        return decryptData;
     }
 
 }

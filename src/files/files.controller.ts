@@ -14,4 +14,11 @@ export class FilesController {
     ) {
         return this.service.uploadedFile(file);
     }
+
+    @Get(':file')
+    getFile(
+        @Param('file') fileName: string
+    ) {
+        return this.service.getFile(fileName);
+    }
 }
