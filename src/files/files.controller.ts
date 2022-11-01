@@ -17,7 +17,7 @@ export class FilesController {
 
     @Get(':file')
     getFile(
-        @Param('file') fileName: string
+        @Param('file') fileName: string,
     ) {
         return this.service.getFile(fileName);
     }

@@ -26,10 +26,15 @@ export class FilesService {
         }
     }
 
-    async getFile(fileName) {
-        const data = await readFile(join(filePath, fileName));
-        let decryptData = this.crypt.decrypt(data.toString());
-        return decryptData;
+    async getFile(fileName: string): Promise<string> {
+        try {
+            const data = await readFile(join(filePath, fileName));
+            let decryptData = this.crypt.decrypt(data.toString());
+            return decryptData;
+            
+        } catch (e) {
+            throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

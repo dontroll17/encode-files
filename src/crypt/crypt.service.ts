@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import 'dotenv/config';
 import { randomBytes, createCipheriv, createDecipheriv, createHash } from 'crypto';
 
 @Injectable()
 export class CryptService {
 
+    getValue() {
+        const algoritm = process.env.ALGORITM;
+        const key = createHash('sha256').update(process.env.KEY).digest('base64').substring(0,32);
+
+        return [algoritm, key];
+    }
+
     encrypt(buffer) {
-        const algoritm = 'aes256';
-        const key = createHash('sha256').update('PASS').digest('base64').substring(0,32);
+        const [algoritm, key] = this.getValue();
 
         const iv = randomBytes(8).toString('hex');
         const cipher = createCipheriv(algoritm, key, iv);
@@ -17,8 +24,7 @@ export class CryptService {
     }
 
     decrypt(string) {
-        const algoritm = 'aes256';
-        const key = createHash('sha256').update('PASS').digest('base64').substring(0,32);
+        const [algoritm, key] = this.getValue();
 
         const [encryptData, iv] = string.split(':');
         const decipher = createDecipheriv(algoritm, key, iv);
